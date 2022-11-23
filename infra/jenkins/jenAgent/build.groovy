@@ -71,7 +71,6 @@ pipeline {
         always {
             script {
                 currentBuild.description = ("Branch : ${JOB.branch}\n GitCommiter : ${JOB.commitAuthor}\nDeploy_server: ${JOB.deploy}")
-
                 EMAIL_MAP = [
 
                         "Job Name"      : JOB_NAME,
