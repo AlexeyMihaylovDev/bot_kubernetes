@@ -31,7 +31,6 @@ pipeline {
         IMAGE_ID = "${env.REGISTRY_URL}/alexey_jenk_agent"
     }
 
-
     stages {
         stage('Get & Print Job Parameters') {
             steps {
