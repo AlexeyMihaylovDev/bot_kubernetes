@@ -73,6 +73,7 @@ pipeline {
                 currentBuild.description = ("Branch : ${JOB.branch}\n GitCommiter : ${JOB.commitAuthor}\nDeploy_server: ${JOB.deploy}")
 
                 EMAIL_MAP = [
+
                         "Job Name"      : JOB_NAME,
                         "Build Number"  : BUILD_NUMBER,
                         "Git tag Name"  : JOB.tagName,
