@@ -33,6 +33,7 @@ pipeline {
     }
     agent {
 
+
         docker {
             label 'linux'
             image '352708296901.dkr.ecr.eu-central-1.amazonaws.com/alexey_jenk_agent:7'
