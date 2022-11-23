@@ -59,7 +59,7 @@ pipeline {
                 script {
                             def imageName = "$BOT_ECR_NAME:${env.BUILD_NUMBER}"
                             def  finalImageName = "$REGISTRY_URL/$BOT_ECR_NAME:${env.BUILD_NUMBER}"
-                            sh "docker build -t $imageName -f  ${JOB.modules[moduleName]['dockerfile']} ."
+                            sh "docker build -t $imageName -f  ${JOB['docker_file_path']} ."
                             sh "docker tag $imageName $finalImageName"
                             sh "docker push $finalImageName"
                         }
@@ -68,7 +68,6 @@ pipeline {
                 }
             }
     post {
-
         always {
             script {
                 currentBuild.description = ("Branch : ${JOB.branch}\n GitCommiter : ${JOB.commitAuthor}\nDeploy_server: ${JOB.deploy}")
