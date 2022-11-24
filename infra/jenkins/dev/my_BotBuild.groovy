@@ -25,7 +25,6 @@ properties([
                 [name: 'ENV',                   $class: 'WHideParameterDefinition', defaultValue: "Developmet"]
 
 
-
         ])
 ])
 pipeline {
