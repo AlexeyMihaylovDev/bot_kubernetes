@@ -23,7 +23,6 @@ properties([
                 // HIDDEN PARAMS
                 [name: 'ENV',                   $class: 'WHideParameterDefinition', defaultValue: "Developmet"]
 
-
         ])
 ])
 pipeline {
@@ -33,13 +32,35 @@ pipeline {
         ansiColor('xterm')
     }
     agent {
-
-
         docker {
             label 'linux'
             image '352708296901.dkr.ecr.eu-central-1.amazonaws.com/alexey_jenk_agent:7'
             args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
         }
+    }
+
+    triggers {
+        GenericTrigger(
+                genericVariables: [
+                        [key: 'ref', value: '$.ref'],
+                        [key: 'changed_files', value: '$.changed_files']
+                ],
+
+                causeString: 'Triggered on $ref',
+
+                token: 'kuku',
+                tokenCredentialId: '',
+
+                printContributedVariables: true,
+                printPostContent: true,
+
+                silentResponse: false,
+
+                shouldNotFlattern: false,
+
+                regexpFilterText: '$ref $changed_files',
+                regexpFilterExpression: 'refs/heads/feature/deploy .*"common/|services/bot/[^"]+?".*'
+        )
     }
     environment {
         REGISTRY_URL = "352708296901.dkr.ecr.eu-central-1.amazonaws.com"
