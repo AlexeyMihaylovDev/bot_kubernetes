@@ -9,11 +9,11 @@ import groovy.transform.Field
 
 @Field JOB = [:]
 
-JOB.docker_file_path = "services/bot/Dockerfile"
+JOB.docker_file_path = "services/worker/Dockerfile"
 JOB.git_project_url = "https://github.com/AlexeyMihaylovDev/bot_kubernetes.git"
-JOB.project_name = "BOT_DEV"
+JOB.project_name = "WORKER_DEV"
 JOB.devops_sys_user = "my_polybot_key"
-JOB.branch = "feature/deploy"
+JOB.branch = "dev"
 JOB.email_recepients = "mamtata2022@gmail.com"
 def cause = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
 JOB.user_run ="${cause.userName}"
@@ -65,8 +65,8 @@ pipeline {
     environment {
         REGISTRY_URL = "352708296901.dkr.ecr.eu-central-1.amazonaws.com"
         REGISTRY_REGION = "eu-central-1"
-        BOT_ECR_NAME = "alexey_bot_dev"
-        IMAGE_ID = "${env.REGISTRY_URL}/alexey_bot_dev"
+        BOT_ECR_NAME = "alexey_worker_dev"
+        IMAGE_ID = "${env.REGISTRY_URL}/alexey_worker_dev"
     }
 
     stages {

@@ -11,7 +11,6 @@ class Bot:
         # create frontend object to the bot programmer
         self.updater = Updater(token, use_context=True)
 
-
         # add _message_handler as main internal msg handler
         self.updater.dispatcher.add_handler(MessageHandler(Filters.text, self._message_handler))
 
