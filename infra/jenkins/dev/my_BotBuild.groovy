@@ -108,7 +108,7 @@ pipeline {
                     sh "docker build -t $imageName -f  ${JOB['docker_file_path']} ."
                     sh "docker tag $imageName $finalImageName"
                     sh "docker push $finalImageName"
-                    JOB.image_name = $finalImageName
+                    JOB.image_name = finalImageName
                 }
             }
         }
