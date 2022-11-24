@@ -46,7 +46,6 @@ pipeline {
                         [key: 'changed_files', value: "\$.commits[*].['modified','added','removed'][*]"]
                 ],
 
-                causeString: 'Triggered on $ref',
 
                 token: 'kuku',
                 tokenCredentialId: '',
