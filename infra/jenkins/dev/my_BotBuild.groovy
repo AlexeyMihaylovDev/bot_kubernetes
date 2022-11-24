@@ -1,7 +1,6 @@
 @Library('global_jenkins_functions') _
 
 
-
 import groovy.time.TimeDuration
 import groovy.transform.Field
 /*************************************************************** | PARAMETERS | ******************************************************************/
