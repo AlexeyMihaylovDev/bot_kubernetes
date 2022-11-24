@@ -10,6 +10,7 @@ import groovy.transform.Field
 @Field JOB = [:]
 
 
+
 JOB.docker_file_path = "services/bot/Dockerfile"
 JOB.git_project_url = "https://github.com/AlexeyMihaylovDev/bot_kubernetes.git"
 JOB.project_name = "BOT_DEV"
