@@ -1,9 +1,9 @@
 pipeline {
     agent {
         docker {
-            // TODO build & push your Jenkins agent image, place the URL here
-            image '<jenkins-agent-image>'
-            args  '--user root -v /var/run/docker.sock:/var/run/docker.sock'
+            label 'linux'
+            image '352708296901.dkr.ecr.eu-central-1.amazonaws.com/alexey_jenk_agent:7'
+            args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
 

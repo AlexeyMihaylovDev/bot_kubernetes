@@ -109,9 +109,17 @@ pipeline {
                     sh "docker build -t $imageName -f  ${JOB['docker_file_path']} ."
                     sh "docker tag $imageName $finalImageName"
                     sh "docker push $finalImageName"
+                    JOB.image_name = $finalImageName
                 }
             }
+        }
+        stage('Trigger Deploy') {
+            steps {
 
+                build job: 'BotDeploy', wait: false, parameters: [
+                        string(name: 'BOT_IMAGE_NAME', value: "${JOB.image_name}")
+                ]
+            }
         }
     }
     post {
