@@ -45,12 +45,10 @@ pipeline {
         GenericTrigger(
                 genericVariables: [
                         [key: 'ref', value: '$.ref'],
-                        [key: 'changed_files', value: '$.commits[*].["modified","added","removed"][*]']
+                        [key: '$.commits[*].[\'modified\',\'added\',\'removed\'][*]']
                 ],
 
-                causeString: '$changed_files in ref $ref ',
-
-                token: 'kuku',
+                token: 'papa',
                 tokenCredentialId: '',
 
                 printContributedVariables: true,
@@ -61,7 +59,7 @@ pipeline {
                 shouldNotFlattern: false,
 
                 regexpFilterText: '$ref $changed_files',
-                regexpFilterExpression: 'refs/heads/dev/ .*"common/[^"]+?".*'
+                regexpFilterExpression: '^(refs/heads/dev|refs/remotes/origin/dev) .*common/+?.*|.*services/bot/+?.*'
         )
     }
     environment {
