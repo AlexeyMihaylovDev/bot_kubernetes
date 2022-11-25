@@ -42,14 +42,11 @@ pipeline {
     triggers {
         GenericTrigger(
                 genericVariables: [
-                        [key: 'ref', value: '$.ref', expressionType: 'JSONPath' ],
-                        [key: 'changed_files', value: '$.commits[*].[\'modified\',\'added\',\'removed\'][*]', expressionType: 'JSONPath' //Optional, defaults to JSONPath
-                        ]
+                        [key: 'ref', value: '$.ref'],
+                        [key: 'changed_files', value: '$.commits[*].[\'modified\',\'added\',\'removed\'][*]']
                 ],
 
-                causeString: 'Triggered on $ref',
-
-                token: 'kuku',
+                token: 'worker',
                 tokenCredentialId: '',
 
                 printContributedVariables: true,
@@ -60,7 +57,7 @@ pipeline {
                 shouldNotFlattern: false,
 
                 regexpFilterText: '$ref $changed_files',
-                regexpFilterExpression: 'refs/heads/dev/ .*"common/|services/bot/[^"]+?".*'
+                regexpFilterExpression: '^(refs/heads/dev|refs/remotes/origin/dev) .*common/+?.*|.*services/worker/+?.*'
         )
     }
     environment {
