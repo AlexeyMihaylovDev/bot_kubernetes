@@ -42,8 +42,9 @@ pipeline {
     triggers {
         GenericTrigger(
                 genericVariables: [
-                        [key: 'ref', value: '$.ref'],
-                        [key: 'changed_files', value: '$.commits[*].["modified","added","removed"][*]']
+                        [key: 'ref', value: '$.ref', expressionType: 'JSONPath' ],
+                        [key: 'changed_files', value: '$.commits[*].[\'modified\',\'added\',\'removed\'][*]', expressionType: 'JSONPath' //Optional, defaults to JSONPath
+                        ]
                 ],
 
                 causeString: 'Triggered on $ref',
