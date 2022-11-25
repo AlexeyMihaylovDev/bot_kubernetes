@@ -43,7 +43,7 @@ pipeline {
         GenericTrigger(
                 genericVariables: [
                         [key: 'ref', value: '$.ref'],
-                        [key: 'changed_files', value: "\$.commits[*].['modified','added','removed'][*]"]
+                        [key: 'changed_files', value: '$.commits[*].["modified","added","removed"][*]']
                 ],
 
                 causeString: 'Triggered on $ref',
