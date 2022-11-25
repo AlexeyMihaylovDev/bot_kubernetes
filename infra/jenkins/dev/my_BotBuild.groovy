@@ -59,7 +59,7 @@ pipeline {
                 shouldNotFlattern: false,
 
                 regexpFilterText: '$ref $changed_files',
-                regexpFilterExpression: 'refs/heads/dev/ .*"common/|services/bot/[^"]+?".*'
+                regexpFilterExpression: 'refs/heads/dev/ .*"common/[^"]+?".*'
         )
     }
     environment {
