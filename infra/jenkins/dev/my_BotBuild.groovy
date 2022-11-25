@@ -39,6 +39,7 @@ pipeline {
         }
     }
 
+
     triggers {
         GenericTrigger(
                 genericVariables: [
