@@ -1,7 +1,7 @@
 {
   "projects" : {
-    "ICmMailSender" : {
-      "pool_name" : "MDSPool",
+    "bot_client" : {
+      "pool_name" : "",
       "project_path": "",
       "dotnet_ver": "framework",
       "change_prerequisites": "no",
@@ -11,29 +11,18 @@
         "prod": [""]
         }
     },
-    "MCOS_ICMService" : {
-      "pool_name" : "MCOS_ICMServicePool",
-      "project_path": "MCOS-ICM\\MCOS_ICMService\\publish",
+    "bot_worker" : {
+      "pool_name" : "",
+      "project_path": "",
       "dotnet_ver": "framework",
       "change_prerequisites": "yes",
-      "test_url": "/MCOS_ICM/check",
+      "test_url": "",
       "servers" : {
-        "dev":  ["D1DDEVFAXMCOS01.dev.local"],
-        "test": ["D1UDEVFAXMCOS01.dev.local"],
-        "prod": ["D1PIDBMCOSICM01.idb.local","D2PIDBMCOSICM01.idb.local"]
+        "dev":  [""],
+        "test": [".dev.local"],
+        "prod": [".idb.local",".idb.local"]
         }
-    },
-    "MDS" : {
-      "pool_name" : "MDSPool",
-      "project_path": "MessageManagement\\publish",
-      "dotnet_ver": "core",
-      "change_prerequisites": "yes",
-      "test_url": ":44399/MDS/check",
-      "servers" : {
-        "dev":  ["D1DDEVFAXMCOS01.dev.local"],
-        "test": ["D1UDEVFAXMCOS01.dev.local"],
-        "prod": ["D1PIDBMCOSICM01.idb.local","D2PIDBMCOSICM01.idb.local"]
-      }
+    }
     }
   }
 
