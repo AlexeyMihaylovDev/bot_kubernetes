@@ -48,7 +48,7 @@ pipeline {
                         [key: 'changed_files', value: '$.commits[*].[\'modified\',\'added\',\'removed\'][*]']
                 ],
 
-                token: 'papa',
+                token: 'bot_dev',
                 tokenCredentialId: '',
 
                 printContributedVariables: true,
