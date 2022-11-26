@@ -38,10 +38,9 @@ pipeline {
                                                script: '''
                                  ef list = []
 
-def dir = new File("${env.WORKSPASE}/images.txt")
-dir.eachFileRecurse (FileType.FILES) { file ->
-  list.add(file.getName())
-}
+
+def list = readFile("${env.WORKSPASE}/images.txt").readLines()
+return list.toList()
                                  '''.toString()
                                       ]]]]
 ]
