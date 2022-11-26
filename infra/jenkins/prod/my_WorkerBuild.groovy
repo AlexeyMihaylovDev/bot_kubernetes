@@ -9,9 +9,9 @@ import groovy.transform.Field
 
 @Field JOB = [:]
 
-JOB.docker_file_path = "services/bot/Dockerfile"
+JOB.docker_file_path = "services/worker/Dockerfile"
 JOB.git_project_url = "https://github.com/AlexeyMihaylovDev/bot_kubernetes.git"
-JOB.project_name = "BOT_PROD"
+JOB.project_name = "WORKER_PROD"
 JOB.devops_sys_user = "my_polybot_key"
 JOB.branch = "master"
 JOB.email_recepients = "mamtata2022@gmail.com"
@@ -39,8 +39,6 @@ pipeline {
         }
     }
 
-
-
     triggers {
         GenericTrigger(
                 genericVariables: [
@@ -48,7 +46,7 @@ pipeline {
                         [key: 'changed_files', value: '$.commits[*].[\'modified\',\'added\',\'removed\'][*]']
                 ],
 
-                token: 'bot_prod',
+                token: 'worker_prod',
                 tokenCredentialId: '',
 
                 printContributedVariables: true,
@@ -59,14 +57,14 @@ pipeline {
                 shouldNotFlattern: false,
 
                 regexpFilterText: '$ref $changed_files',
-                regexpFilterExpression: '^(refs/heads/master|refs/remotes/origin/master) .*common/+?.*|.*services/bot/+?.*'
+                regexpFilterExpression: '^(refs/heads/master|refs/remotes/origin/master) .*common/+?.*|.*services/worker/+?.*'
         )
     }
     environment {
         REGISTRY_URL = "352708296901.dkr.ecr.eu-central-1.amazonaws.com"
         REGISTRY_REGION = "eu-central-1"
-        BOT_ECR_NAME = "alexey_bot_prod"
-        IMAGE_ID = "${env.REGISTRY_URL}/alexey_bot_prod"
+        BOT_ECR_NAME = "alexey_worker_prod"
+        IMAGE_ID = "${env.REGISTRY_URL}/alexey_worker_prod"
     }
 
     stages {
@@ -109,9 +107,9 @@ pipeline {
                     sh "docker build -t $imageName -f  ${JOB['docker_file_path']} ."
                     sh "docker tag $imageName $finalImageName"
                     sh "docker push $finalImageName"
-                    JOB.image_name = finalImageName
                 }
             }
+
         }
     }
     post {
