@@ -32,7 +32,9 @@ pipeline {
     stages {
         stage('Unittest Bot') {
             steps {
+                script{   println($ref)
                 echo 'testing bot...'
+            }
             }
         }
         stage('Unittest Worker') {
