@@ -23,7 +23,7 @@ pipeline {
             steps {
                 script {
 
-                    sh "aws ecr list-images --repository-name alexey_worker_prod | jq \'.imageIds[] | .imageTag\' > images.txt"
+                    sh "aws ecr list-images --repository-name alexey_bot_prod | jq \'.imageIds[] | .imageTag\' > images.txt"
                     JOB.images = readFile("${env.WORKSPACE}/images.txt").replace("\"","").split("\n") as List
                     println( JOB.images)
 
