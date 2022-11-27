@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            label 'kuber'
+            label 'k0s'
             image '352708296901.dkr.ecr.eu-central-1.amazonaws.com/alexey_jenk_agent:7'
             args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
         }
