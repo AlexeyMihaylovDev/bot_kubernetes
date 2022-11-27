@@ -63,10 +63,10 @@ pipeline {
         )
     }
     environment {
-        REGISTRY_URL = "352708296901.dkr.ecr.eu-central-1.amazonaws.com"
+        REGISTRY_URL = "public.ecr.aws/r7m7o9d4/alexey_dima_bot_dev"
         REGISTRY_REGION = "eu-central-1"
-        BOT_ECR_NAME = "alexey_bot_dev"
-        IMAGE_ID = "${env.REGISTRY_URL}/alexey_bot_dev"
+        BOT_ECR_NAME = "alexey_dima_bot_dev"
+        IMAGE_ID = "${env.REGISTRY_URL}/alexey_dima_bot_dev"
     }
 
     stages {
