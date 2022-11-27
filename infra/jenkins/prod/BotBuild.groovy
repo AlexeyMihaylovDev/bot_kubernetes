@@ -105,7 +105,7 @@ pipeline {
                 sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin $REGISTRY_URL"
                 script {
                     def imageName = "$BOT_ECR_NAME:${env.BUILD_NUMBER}"
-                    def  finalImageName = "$REGISTRY_URL/$BOT_ECR_NAME:${JOB.project_name}_${env.BUILD_NUMBER}"
+                    def  finalImageName = "$REGISTRY_URL/$BOT_ECR_NAME:${JOB.project_name}-0.0.${env.BUILD_NUMBER}"
                     sh "docker build -t $imageName -f  ${JOB['docker_file_path']} ."
                     sh "docker tag $imageName $finalImageName"
                     sh "docker push $finalImageName"
