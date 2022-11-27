@@ -60,6 +60,7 @@ pipeline {
                 regexpFilterExpression: '^(refs/heads/dev|refs/remotes/origin/dev) .*common/+?.*|.*services/worker/+?.*'
         )
     }
+
     environment {
         REGISTRY_URL = "352708296901.dkr.ecr.eu-central-1.amazonaws.com"
         REGISTRY_REGION = "eu-central-1"
