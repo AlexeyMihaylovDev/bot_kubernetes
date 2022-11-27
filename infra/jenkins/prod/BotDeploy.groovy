@@ -24,8 +24,8 @@ pipeline {
                 script {
 
                     sh "aws ecr list-images --repository-name alexey_bot_prod | jq \'.imageIds[] | .imageTag\' > images.txt"
-                    JOB.images = readFile("${env.WORKSPACE}/images.txt").replace("\"","").split("\n") as List
-                    println( JOB.images)
+                    JOB.images = readFile("${env.WORKSPACE}/images.txt").replace("\"", "").split("\n") as List
+                    println(JOB.images)
 
                 }
 
@@ -38,7 +38,7 @@ pipeline {
 
                     println(workspace)
                     def userInput = input id: 'UserInput', message: 'Please provide parameters.', ok: 'OK', parameters: [
-                            [name: 'Temp_var',$class: 'WHideParameterDefinition', defaultValue: JOB.images.join(",")],
+                            [name: 'Temp_var', $class: 'WHideParameterDefinition', defaultValue: JOB.images.join(",")],
                             [$class: 'CascadeChoiceParameter', choiceType: 'PT_SINGLE_SELECT', filterLength: 1, filterable: false,
                              name  : 'Images', referencedParameters: 'Temp_var',
                              script: [$class: 'GroovyScript', fallbackScript: [classpath: [], oldScript: '', sandbox: true, script: 'return [\'error\']'],
@@ -56,16 +56,17 @@ Temp_var.split(",").toList().sort()
             }
         }
 
-    }
-    stage('Bot Deploy') {
-        steps {
-            script{
-            BOT_IMAGE_NAME = JOB.deploy_image}
-            withCredentials([
-                    string(credentialsId: 'telegram-bot-token', variable: 'TELEGRAM_TOKEN'),
-                    file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
-            ]) {
-                sh '''
+
+        stage('Bot Deploy') {
+            steps {
+                script {
+                    BOT_IMAGE_NAME = JOB.deploy_image
+                }
+                withCredentials([
+                        string(credentialsId: 'telegram-bot-token', variable: 'TELEGRAM_TOKEN'),
+                        file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
+                ]) {
+                    sh '''
                     K8S_CONFIGS=infra/k8s
 
                     # replace placeholders in YAML k8s files
@@ -76,6 +77,7 @@ Temp_var.split(",").toList().sort()
                     # apply the configurations to k8s cluster
                     kubectl apply --kubeconfig ${KUBECONFIG} -f $K8S_CONFIGS/bot.yaml
                     '''
+                }
             }
         }
     }
