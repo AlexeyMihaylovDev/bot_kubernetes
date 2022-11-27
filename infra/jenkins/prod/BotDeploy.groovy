@@ -24,7 +24,7 @@ pipeline {
                 script {
 
                     sh "aws ecr list-images --repository-name alexey_bot_prod | jq \'.imageIds[] | .imageTag\' > images.txt"
-                    JOB.images = readFile("${env.WORKSPACE}/images.txt").replace("\"", "").split("\n") as List
+                    JOB.images = readFile("${env.WORKSPACE}/images.txt").replace("\"", "").split("\\s*") as List
                     println(JOB.images)
 
                 }
