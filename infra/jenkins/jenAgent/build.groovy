@@ -24,6 +24,27 @@ pipeline {
         ansiColor('xterm')
     }
     agent { label 'linux' }
+    triggers {
+        GenericTrigger(
+                genericVariables: [
+                        [key: 'ref', value: '$.ref'],
+                        [key: 'changed_files', value: '$.commits[*].[\'modified\',\'added\',\'removed\'][*]']
+                ],
+
+                token: 'jenkins_agent',
+                tokenCredentialId: '',
+
+                printContributedVariables: true,
+                printPostContent: true,
+
+                silentResponse: false,
+
+                shouldNotFlattern: false,
+
+                regexpFilterText: '$ref $changed_files',
+                regexpFilterExpression: '^(refs/heads/dev|refs/remotes/origin/dev) .*infra/jenkins/jenAgent/+?.*'
+        )
+    }
     environment {
         REGISTRY_URL = "352708296901.dkr.ecr.eu-central-1.amazonaws.com"
         REGISTRY_REGION = "eu-central-1"
