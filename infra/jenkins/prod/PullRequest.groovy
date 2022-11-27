@@ -15,7 +15,7 @@ pipeline {
                         [key: 'pull_request_number', value: '$.pull_request_number'],
                 ],
 
-                token: 'bot_dev',
+                token: 'PR',
                 tokenCredentialId: '',
 
                 printContributedVariables: true,
