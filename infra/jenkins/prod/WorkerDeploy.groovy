@@ -1,6 +1,8 @@
+import groovy.transform.Field
+
 @Library('global_jenkins_functions') _
 
-JOB = [:]
+@Field JOB = [:]
 JOB.email_recepients = "mamtata2022@gmail.com"
 
 pipeline {
@@ -58,6 +60,13 @@ Temp_var.split(",").toList().sort()
 
     }
     stage('Bot Deploy') {
+        environment {
+            APP_ENV = "prod"
+            BOT_IMAGE_NAME = "${JOB.deploy_image}"
+            REGISTRY_URL = "352708296901.dkr.ecr.eu-central-1.amazonaws.com"
+            BOT_ECR_NAME = "alexey_bot_prod"
+
+        }
         steps {
             script{
             BOT_IMAGE_NAME = JOB.deploy_image}
@@ -72,7 +81,7 @@ Temp_var.split(",").toList().sort()
 
                     # replace placeholders in YAML k8s files
                     bash common/replaceInFile.sh $K8S_CONFIGS/bot.yaml APP_ENV $APP_ENV
-                    bash common/replaceInFile.sh $K8S_CONFIGS/bot.yaml BOT_IMAGE $BOT_IMAGE_NAME
+                    bash common/replaceInFile.sh $K8S_CONFIGS/bot.yaml BOT_IMAGE $REGISTRY_URL/$BOT_ECR_NAME:$BOT_IMAGE_NAME
                     bash common/replaceInFile.sh $K8S_CONFIGS/bot.yaml TELEGRAM_TOKEN $(echo $TELEGRAM_TOKEN | base64)
 
                     # apply the configurations to k8s cluster

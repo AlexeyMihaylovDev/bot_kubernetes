@@ -1,6 +1,8 @@
+import groovy.transform.Field
+
 @Library('global_jenkins_functions') _
 
-JOB = [:]
+@Field JOB = [:]
 JOB.email_recepients = "mamtata2022@gmail.com"
 
 pipeline {
@@ -14,9 +16,7 @@ pipeline {
            label 'k0s'
        }
    }
-    environment {
-        APP_ENV = "prod"
-    }
+
 
     stages {
         stage('get last images from ECR') {
@@ -58,10 +58,15 @@ Temp_var.split(",").toList().sort()
 
 
         stage('Bot Deploy') {
-            steps {
-                script {
-                    BOT_IMAGE_NAME = JOB.deploy_image
+            environment {
+                APP_ENV = "prod"
+                BOT_IMAGE_NAME = "${JOB.deploy_image}"
+                REGISTRY_URL = "352708296901.dkr.ecr.eu-central-1.amazonaws.com"
+                BOT_ECR_NAME = "alexey_bot_prod"
+
                 }
+
+            steps {
                 withCredentials([
                         string(credentialsId: 'telegram-bot-token', variable: 'TELEGRAM_TOKEN'),
                         file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
@@ -73,7 +78,7 @@ Temp_var.split(",").toList().sort()
 
                     # replace placeholders in YAML k8s files
                     bash common/replaceInFile.sh $K8S_CONFIGS/bot.yaml APP_ENV $APP_ENV
-                    bash common/replaceInFile.sh $K8S_CONFIGS/bot.yaml BOT_IMAGE $BOT_IMAGE_NAME
+                    bash common/replaceInFile.sh $K8S_CONFIGS/bot.yaml BOT_IMAGE $REGISTRY_URL/$BOT_ECR_NAME:$BOT_IMAGE_NAME
                     bash common/replaceInFile.sh $K8S_CONFIGS/bot.yaml TELEGRAM_TOKEN $(echo -n $TELEGRAM_TOKEN | base64)
 
 
