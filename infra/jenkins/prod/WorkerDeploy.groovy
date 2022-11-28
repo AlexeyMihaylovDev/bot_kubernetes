@@ -11,11 +11,11 @@ pipeline {
         timestamps()
         ansiColor('xterm')
     }
-  agent {
-      node {
-          label 'k0s'
-      }
-  }
+    agent {
+        node {
+            label 'k0s'
+        }
+    }
     environment {
         APP_ENV = "prod"
     }
@@ -26,8 +26,8 @@ pipeline {
                 script {
 
                     sh "aws ecr list-images --repository-name alexey_worker_prod | jq \'.imageIds[] | .imageTag\' > images.txt"
-                    JOB.images = readFile("${env.WORKSPACE}/images.txt").replace("\"","").split("\n") as List
-                    println( JOB.images)
+                    JOB.images = readFile("${env.WORKSPACE}/images.txt").replace("\"", "").split("\n") as List
+                    println(JOB.images)
 
                 }
 
@@ -40,7 +40,7 @@ pipeline {
 
                     println(workspace)
                     def userInput = input id: 'UserInput', message: 'Please provide parameters.', ok: 'OK', parameters: [
-                            [name: 'Temp_var',$class: 'WHideParameterDefinition', defaultValue: JOB.images.join(",")],
+                            [name: 'Temp_var', $class: 'WHideParameterDefinition', defaultValue: JOB.images.join(",")],
                             [$class: 'CascadeChoiceParameter', choiceType: 'PT_SINGLE_SELECT', filterLength: 1, filterable: false,
                              name  : 'Images', referencedParameters: 'Temp_var',
                              script: [$class: 'GroovyScript', fallbackScript: [classpath: [], oldScript: '', sandbox: true, script: 'return [\'error\']'],
@@ -58,25 +58,22 @@ Temp_var.split(",").toList().sort()
             }
         }
 
-    }
-    stage('Bot Deploy') {
-        environment {
-            APP_ENV = "prod"
-            BOT_IMAGE_NAME = "${JOB.deploy_image}"
-            REGISTRY_URL = "352708296901.dkr.ecr.eu-central-1.amazonaws.com"
-            BOT_ECR_NAME = "alexey_bot_prod"
+        stage('Bot Deploy') {
+            environment {
+                APP_ENV = "prod"
+                BOT_IMAGE_NAME = "${JOB.deploy_image}"
+                REGISTRY_URL = "352708296901.dkr.ecr.eu-central-1.amazonaws.com"
+                BOT_ECR_NAME = "alexey_bot_prod"
 
-        }
-        steps {
-            script{
-            BOT_IMAGE_NAME = JOB.deploy_image}
-            withCredentials([
-                    string(credentialsId: 'telegram-bot-token', variable: 'TELEGRAM_TOKEN'),
-                    file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
-            ]) {
-                sh 'aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 352708296901.dkr.ecr.eu-central-1.amazonaws.com'
+            }
+            steps {
+                withCredentials([
+                        string(credentialsId: 'telegram-bot-token', variable: 'TELEGRAM_TOKEN'),
+                        file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
+                ]) {
+                    sh 'aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 352708296901.dkr.ecr.eu-central-1.amazonaws.com'
 
-                sh '''
+                    sh '''
                     K8S_CONFIGS=infra/k8s
 
                     # replace placeholders in YAML k8s files
@@ -87,10 +84,10 @@ Temp_var.split(",").toList().sort()
                     # apply the configurations to k8s cluster
                     kubectl apply --kubeconfig ${KUBECONFIG} -f $K8S_CONFIGS/bot.yaml
                     '''
+                }
             }
         }
     }
-
 
     post {
         always {
