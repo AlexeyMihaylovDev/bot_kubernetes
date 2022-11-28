@@ -63,7 +63,7 @@ Temp_var.split(",").toList().sort()
                 APP_ENV = "prod"
                 BOT_IMAGE_NAME = "${JOB.deploy_image}"
                 REGISTRY_URL = "352708296901.dkr.ecr.eu-central-1.amazonaws.com"
-                BOT_ECR_NAME = "alexey_bot_prod"
+                BOT_ECR_NAME = "alexey_worker_prod"
 
             }
             steps {
