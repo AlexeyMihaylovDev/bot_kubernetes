@@ -1,0 +1,29 @@
+{
+  "projects" : {
+    "bot_client" : {
+      "pool_name" : "",
+      "project_path": "",
+      "dotnet_ver": "framework",
+      "change_prerequisites": "no",
+      "servers" : {
+        "dev":  [""],
+        "test": [""],
+        "prod": [""]
+        }
+    },
+    "bot_worker" : {
+      "pool_name" : "",
+      "project_path": "",
+      "dotnet_ver": "framework",
+      "change_prerequisites": "yes",
+      "test_url": "",
+      "servers" : {
+        "dev":  [""],
+        "test": [".dev.local"],
+        "prod": [".idb.local",".idb.local"]
+        }
+    }
+    }
+  }
+
+}
