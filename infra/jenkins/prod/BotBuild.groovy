@@ -63,10 +63,10 @@ pipeline {
         )
     }
     environment {
-        REGISTRY_URL = "352708296901.dkr.ecr.eu-central-1.amazonaws.com"
+        REGISTRY_URL = "public.ecr.aws/r7m7o9d4"
         REGISTRY_REGION = "eu-central-1"
-        BOT_ECR_NAME = "alexey_bot_prod"
-        IMAGE_ID = "${env.REGISTRY_URL}/alexey_bot_prod"
+        BOT_ECR_NAME = "alexey_dima_bot_prod"
+        IMAGE_ID = "${env.REGISTRY_URL}/alexey_dima_bot_prod"
     }
 
     stages {
@@ -102,7 +102,7 @@ pipeline {
         }
         stage("build") {
             steps {
-                sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin $REGISTRY_URL"
+                sh "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin  $REGISTRY_URL"
                 script {
                     def imageName = "$BOT_ECR_NAME:${env.BUILD_NUMBER}"
                     def  finalImageName = "$REGISTRY_URL/$BOT_ECR_NAME:${JOB.project_name}_${env.BUILD_NUMBER}"
