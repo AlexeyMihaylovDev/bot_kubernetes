@@ -110,7 +110,13 @@ pipeline {
                     sh "docker push $finalImageName"
                 }
             }
-
+        }
+        stage('Trigger Deploy') {
+            steps {
+                build job: 'WorkerDeploy', wait: false, parameters: [
+                    string(name: 'WORKER_IMAGE_NAME', value: "$finalImageName")
+                ]
+            }
         }
     }
     post {
