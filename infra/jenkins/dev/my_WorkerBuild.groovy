@@ -114,7 +114,7 @@ pipeline {
         stage('Trigger Deploy') {
             steps {
                 build job: 'WorkerDeploy', wait: false, parameters: [
-                    string(name: 'WORKER_IMAGE_NAME', value: "${finalImageName}")
+                    string(name: 'WORKER_IMAGE_NAME', value: "${REGISTRY_URL}/${BOT_ECR_NAME}:${JOB.project_name}_${env.BUILD_NUMBER}")
                 ]
             }
         }
