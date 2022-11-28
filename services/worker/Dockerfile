@@ -6,4 +6,4 @@ RUN cp -r common/ $APP_PATH/common
 RUN pip install -r $APP_PATH/requirements.txt
 
 
-CMD ["python3", "$APP_PATH/app.py"]
+CMD ["python3", "services/worker/app.py"]
