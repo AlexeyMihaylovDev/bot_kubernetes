@@ -77,12 +77,12 @@ Temp_var.split(",").toList().sort()
                     K8S_CONFIGS=infra/k8s
 
                     # replace placeholders in YAML k8s files
-                    bash common/replaceInFile.sh $K8S_CONFIGS/bot.yaml APP_ENV $APP_ENV
-                    bash common/replaceInFile.sh $K8S_CONFIGS/bot.yaml BOT_IMAGE $REGISTRY_URL/$BOT_ECR_NAME:$BOT_IMAGE_NAME
-                    bash common/replaceInFile.sh $K8S_CONFIGS/bot.yaml TELEGRAM_TOKEN $(echo -n $TELEGRAM_TOKEN | base64)
+                    bash common/replaceInFile.sh $K8S_CONFIGS/worker.yaml APP_ENV $APP_ENV
+                    bash common/replaceInFile.sh $K8S_CONFIGS/worker.yaml BOT_IMAGE $REGISTRY_URL/$BOT_ECR_NAME:$BOT_IMAGE_NAME
+                    bash common/replaceInFile.sh $K8S_CONFIGS/worker.yaml TELEGRAM_TOKEN $(echo -n $TELEGRAM_TOKEN | base64)
 
                     # apply the configurations to k8s cluster
-                    kubectl apply --kubeconfig ${KUBECONFIG} -f $K8S_CONFIGS/bot.yaml
+                    kubectl apply --kubeconfig ${KUBECONFIG} -f $K8S_CONFIGS/worker.yaml
                     '''
                 }
             }
