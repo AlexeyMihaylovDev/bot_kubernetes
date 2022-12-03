@@ -7,16 +7,6 @@ RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zi
   && ./aws/install --bin-dir /aws-cli-bin/ \
   && rm -rf aws awscliv2.zip
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3.5 \
-    python3-pip \
-    && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN pip3 install nibabel pydicom matplotlib pillow
-RUN pip3 install med2image
-
 
 RUN \
 # Update
@@ -45,10 +35,13 @@ RUN curl -s -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/s
   && rm -rf sonarscanner.zip \
   && mv sonar-scanner-4.7.0.2747 sonar-scanner
 
-# kubectl
-RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" \
-    && chmod +x kubectl \
-    && mv ./kubectl /usr/local/bin/
+#install gradle 
+RUN curl -L https://services.gradle.org/distributions/gradle-7.6-bin.zip -o gradle-7.6-bin.zip \
+  && unzip gradle-7.6-bin.zip \
+  && rm -rf gradle-7.6-bin.zip 
+
+
+
 
 
 FROM jenkins/agent
@@ -61,9 +54,18 @@ COPY --from=installer /usr/share/maven/bin/mvn /usr/bin/mvn
 COPY --from=installer sonar-scanner /usr/local/sonar-scanner/
 COPY --from=installer sonar-scanner/bin/ /usr/local/bin/
 COPY --from=installer sonar-scanner/conf/sonar-scanner.properties  /usr/local/sonar-scanner/conf/sonar-scanner.properties
-COPY --from=installer /usr/local/bin/kubectl /usr/local/bin/
+COPY --from=installer gradle-7.6 /usr/local/gradle-7.6/
 
+USER  root
+# install git
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y git \
+    && git config --global http.sslverify false
+    
 
+ENV GRADLE_HOME=/usr/local/gradle-7.6
+ENV PATH=$PATH:$GRADLE_HOME/bin    
 ENV SONAR_RUNNER_HOME=/usr/local/sonar-scanner/
 ENV SONAR $PATH:$SONAR_RUNNER_HOME/bin
 ENV PATH $SONAR_RUNNER_HOME:$PATH
