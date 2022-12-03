@@ -63,9 +63,7 @@ COPY --from=installer sonar-scanner/bin/ /usr/local/bin/
 COPY --from=installer sonar-scanner/conf/sonar-scanner.properties  /usr/local/sonar-scanner/conf/sonar-scanner.properties
 COPY --from=installer /usr/local/bin/kubectl /usr/local/bin/
 
-#install jq
-RUN  apt update \
-    &&  apt install jq -y
+
 
 ENV SONAR_RUNNER_HOME=/usr/local/sonar-scanner/
 ENV SONAR $PATH:$SONAR_RUNNER_HOME/bin
