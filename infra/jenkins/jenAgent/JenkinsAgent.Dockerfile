@@ -51,7 +51,7 @@ RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/s
     && mv ./kubectl /usr/local/bin/
 
 #install jq
-RUN wget "http://stedolan.github.io/jq/download/linux64/jq"  \
+RUN wget "http://stedolan.github.io/jq/download/linux64/jq" && chmod 777 jq \
     && mv ./jq /usr/local/bin/
 
 
