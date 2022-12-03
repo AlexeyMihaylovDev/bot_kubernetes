@@ -11,13 +11,11 @@ pipeline {
         timestamps()
         ansiColor('xterm')
     }
-    agent {
-        docker {
-            label 'k0s'
-            image '352708296901.dkr.ecr.eu-central-1.amazonaws.com/alexey_jenk_agent:24'
-            args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
+   agent {
+       node {
+           label 'k0s'
+       }
+   }
 
 
     stages {
