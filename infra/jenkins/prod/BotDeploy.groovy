@@ -75,9 +75,9 @@ Temp_var.split(",").toList().sort()
                         try {
                             sh '''kubectl delete --kubeconfig ${KUBECONFIG} secrets --namespace prod ecr-docker-creds'''
                         } catch (Exception e) {
-                            println ("Create new cred for ECR")
-                            sh '''kubectl create secret docker-registry ecr-docker-creds --kubeconfig ${KUBECONFIG}  --docker-server=352708296901.dkr.ecr.eu-central-1.amazonaws.com  --docker-username=AWS --docker-password=$(aws ecr get-login-password) --namespace=prod '''
+                            println ("ecr-docker-creds is not found")
                         }
+                        sh '''kubectl create secret docker-registry ecr-docker-creds --kubeconfig ${KUBECONFIG}  --docker-server=352708296901.dkr.ecr.eu-central-1.amazonaws.com  --docker-username=AWS --docker-password=$(aws ecr get-login-password) --namespace=prod '''
 
 
                         sh 'aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 352708296901.dkr.ecr.eu-central-1.amazonaws.com'
