@@ -63,7 +63,6 @@ Temp_var.split(",").toList().sort()
                 BOT_IMAGE_NAME = "${JOB.deploy_image}"
                 REGISTRY_URL = "352708296901.dkr.ecr.eu-central-1.amazonaws.com"
                 BOT_ECR_NAME = "alexey_bot_prod"
-
                 }
 
             steps {
@@ -72,8 +71,18 @@ Temp_var.split(",").toList().sort()
                         file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
                 ]) {
 
-                    sh 'aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 352708296901.dkr.ecr.eu-central-1.amazonaws.com'
-                    sh '''
+                    script {
+                        try {
+                            sh '''kubectl delete --kubeconfig ${KUBECONFIG} secrets --namespace prod ecr-docker-creds'''
+                        } catch (Exception e) {
+                            println ("Create new cred for ECR")
+                            sh '''kubectl create secret docker-registry ecr-docker-creds --kubeconfig ${KUBECONFIG}  --docker-server=352708296901.dkr.ecr.eu-central-1.amazonaws.com  --docker-username=AWS --docker-password=$(aws ecr get-login-password) --namespace=prod '''
+                        }
+
+
+                        sh 'aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 352708296901.dkr.ecr.eu-central-1.amazonaws.com'
+                        sh '''
+                                        
                     K8S_CONFIGS=infra/k8s
 
                     # replace placeholders in YAML k8s files
@@ -85,6 +94,7 @@ Temp_var.split(",").toList().sort()
                     # apply the configurations to k8s cluster
                     kubectl apply --kubeconfig ${KUBECONFIG} -f $K8S_CONFIGS/bot.yaml
                     '''
+                    }
                 }
             }
         }
