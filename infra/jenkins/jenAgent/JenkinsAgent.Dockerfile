@@ -50,6 +50,12 @@ RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/s
     && chmod +x kubectl \
     && mv ./kubectl /usr/local/bin/
 
+#install jq
+RUN wget "http://stedolan.github.io/jq/download/linux64/jq"  \
+    && mv ./jq /usr/local/bin/
+
+
+
 
 FROM jenkins/agent
 COPY --from=docker /usr/local/bin/docker /usr/local/bin/
@@ -62,6 +68,7 @@ COPY --from=installer sonar-scanner /usr/local/sonar-scanner/
 COPY --from=installer sonar-scanner/bin/ /usr/local/bin/
 COPY --from=installer sonar-scanner/conf/sonar-scanner.properties  /usr/local/sonar-scanner/conf/sonar-scanner.properties
 COPY --from=installer /usr/local/bin/kubectl /usr/local/bin/
+COPY --from=installer /usr/local/bin/jq /usr/local/bin/
 
 
 
